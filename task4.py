@@ -2,19 +2,18 @@ import pandas as pd
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
-# Load the processed sales data from CSV file
+# Load the processed sales data 
 df = pd.read_csv("processed_data.csv")
-# Convert the date column to datetime format for proper time series handling
+# Convert the date column to datetime format
 df["date"] = pd.to_datetime(df["date"])
 
-# Initialize the Dash web application
 app = Dash(__name__)
 
-# Define the layout of the web app with title, filter controls, and graph
+# Define the layout of the web app
 app.layout = html.Div(children=[
     html.H1("Pink Morsel Sales", style={"textAlign": "center"}),
 
-    # Region selection radio buttons for filtering data
+    # Region selection radio buttons 
     html.Div([
         html.Label("Select Region"),
         dcc.RadioItems(
@@ -34,7 +33,7 @@ app.layout = html.Div(children=[
     dcc.Graph(id="sales_line")
 ])
 
-# Updates the graph when the region selection changes
+# Updates the graph
 @app.callback(
     Output("sales_line", "figure"),  
     Input("region_", "value")  
@@ -45,7 +44,6 @@ def update(region):
         # If "all" is selected, use the entire dataset
         filtered = df
     else:
-        # Otherwise, filter by the selected region 
         filtered = df[df["region"].str.lower() == region]
 
     # Create a line chart using the filtered data
